@@ -1,0 +1,41 @@
+﻿@model CreateTagViewModel
+@{
+    ViewData["Title"] = "Create";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <h2>Create New Tag</h2>
+        </div>
+        <div class="col-sm">
+            <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col">
+            <p>Once you create a tag, you can use it to auto assign a bug.</p>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Bound" class="control-label"></label>
+                    <select asp-for="Bound" asp-items="@Model.BoundRoles" class="form-control"></select>
+                    <span asp-validation-for="Bound" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-outline-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

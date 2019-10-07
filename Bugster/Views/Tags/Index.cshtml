@@ -1,0 +1,99 @@
+﻿@model IEnumerable<TagResponse>
+@{
+    ViewData["Title"] = "Tags";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <h2>Available tags</h2>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col">
+            <p>View all the tags.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive-md">
+                <table id="tagsTable" class="table table-bordred table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th class="align-middle">Id</th>
+                            <th class="align-middle">Name</th>
+                            <th class="align-middle">Tag role</th>
+                            <th><a asp-action="Create" class="align-middle float-right btn btn-outline-info">Create Tag</a></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Any())
+                        {
+                            <tr><td colspan="4">There are no tags in the database :(</td></tr>
+                        }
+                        else
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Bound</td>
+                                    <td class="float-right">
+                                        <a asp-action="Update" asp-route-tagId="@item.Id"><i class="fa fa-lg fa-fw fa-pencil"></i></a>
+                                        <a href="#" class="deleteTagAction" data-toggle="modal" data-target="#deleteTagModal" data-id="@item.Id"><i class="fa fa-lg fa-fw fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteTagModal" tabindex="-1" role="dialog" aria-labelledby="deleteTagModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteTagModalLabel">Delete this Tag?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure?
+                <input type="hidden" name="hiddenValue" id="hiddenValue" value="" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                <a asp-action="Delete" id="confirmTagDelete" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $('#tagsTable').DataTable({
+                responsive: true,
+                "columns": [
+                    null,
+                    null,
+                    null,
+                    { "orderable": false }
+                ]
+            });
+
+            $('.deleteTagAction').click(function () {
+                var tagId = $(this).data('id');
+                var href = $("#confirmTagDelete").attr("href");
+                $("#confirmTagDelete").attr("href", href + "?tagId=" + tagId);
+            });
+        });
+        
+    </script>
+}

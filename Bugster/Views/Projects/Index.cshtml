@@ -1,0 +1,98 @@
+﻿@model IEnumerable<ProjectResponse>
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Projects";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <h2>View Projects</h2>
+        </div>
+        <div class="row mt-3">
+            <div class="col">
+                <p>View all the projects.</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive-md">
+                <table id="projectsTable" class="table table-bordred table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th class="align-middle">Id</th>
+                            <th class="align-middle">Name</th>
+                            <th><a asp-action="Create" class="align-middle float-right btn btn-outline-info">Add Project</a></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Any())
+                        {
+                            <tr><td colspan="5">There are no projects in the database :(</td></tr>
+                        }
+                        else
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.Name</td>
+                                    <td class="float-right">
+                                        <a asp-action="Details" asp-route-projectId="@item.Id"><i class="fa fa-lg fa-fw fa-file"></i></a>
+                                        <a asp-action="Update" asp-route-projectId="@item.Id"><i class="fa fa-lg fa-fw fa-pencil"></i></a>
+                                        <a href="#" class="deleteProjectAction" data-toggle="modal" data-target="#deleteProjectModal" data-id="@item.Id"><i class="fa fa-lg fa-fw fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="deleteProjectModal" tabindex="-1" role="dialog" aria-labelledby="deleteProjectModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteProjectModalLabel">Delete This Project?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure? This will also delete all the bugs which belong to this project.
+                <input type="hidden" name="hiddenValue" id="hiddenValue" value="" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                <a asp-action="Delete" id="confirmProjectDelete" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $('#projectsTable').DataTable({
+                responsive: true,
+                "columns": [
+                    null,
+                    null,
+                    { "orderable": false }
+                ]
+            });
+
+            $('.deleteProjectAction').click(function () {
+                var projectId = $(this).data('id');
+                var href = $("#confirmProjectDelete").attr("href");
+                $("#confirmProjectDelete").attr("href", href + "?projectId=" + projectId);
+            })
+        });
+    </script>
+}

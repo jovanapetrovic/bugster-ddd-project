@@ -1,0 +1,77 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="jumbotron">
+        <h1 class="display-4">Welcome to Bugster App!</h1>
+        <p class="lead">This is a simple bug tracking app which makes it easy for you to take care of your users, projects and bugs. It is a result of a project for NWT subject.</p>
+        <hr class="my-4">
+        <img src="~/images/bugtracker.png" class="img-fluid rounded" alt="Responsive image" />
+        <hr class="my-4">
+        <p>Take a look at some more project related details:</p>
+        <p class="lead">
+            <a class="btn btn-primary btn-lg" data-toggle="collapse" href="#collapseDescription" aria-expanded="false" aria-controls="collapseDescription">
+                Project Description
+            </a>
+            <a class="btn btn-primary btn-lg" data-toggle="collapse" href="#collapseSummary" aria-expanded="false" aria-controls="collapseSummary">
+                DDD Summary
+            </a>
+        </p>
+        <div class="collapse" id="collapseDescription">
+            <div class="card card-body">
+                <p>
+                    <h3>Domain Driven Design</h3>
+                    <ul>
+                        <li>
+                            This version of Bugster project was created based on Domain Driven Design principles.
+                        </li>
+                        <li>
+                            These two links were the most helpful for me to understand DDD:
+                            <ol>
+                                <li><a href="https://www.thereformedprogrammer.net/three-approaches-to-domain-driven-design-with-entity-framework-core/">Three approaches to Domain-Driven Design with EF Core</a></li>
+                                <li><a href="https://www.thereformedprogrammer.net/creating-domain-driven-design-entity-classes-with-entity-framework-core/">Creating Domain-Driven Design entity classes with Entity Framework Core</a></li>
+                            </ol>
+                        </li>
+                    </ul>
+                </p>
+            </div>
+        </div>
+        <div class="collapse" id="collapseSummary">
+            <div class="card card-body">
+                <p>
+                    <h3>DDD Summary</h3>
+                    <ol>
+                        <li>
+                            You provide public constructor(s) for developers to create a properly initialised instance of the class.
+                            If the code needed to create an instance includes possible user-fixable errors then it will need static
+                            factory method instead, which will return Status<T>, where T is the class it is creating.
+                        </li>
+                        <li>
+                            All properties should have a private setter, i.e. they are read-only from outside the class
+                        </li>
+                        <li>
+                            For navigational properties that are collections you need to use backing fields and a IEnumerable<T>
+                                for the public property. That stops developers from changing the collection.
+                        </li>
+                        <li>
+                            You need to provide methods for all the different ways you want to change the data in the entity class, 
+                            both property updates and aggregate updates. These access methods either return void if the process has 
+                            no user-fixable errors in it, or a status value containing success or a list of errors if the code can 
+                            detect user-fixable errors.
+                        </li>
+                        <li>
+                            The ‘scope’ of what the code in the entity class should take on is important. I have found limiting the 
+                            methods to only changing the root entity and its aggregates is a good idea. I also limit my validation 
+                            checks to making sure the entities I am updating are correctly formed, i.e. I don’t check outside 
+                            business rules like stock availability etc. – that is the role of proper business logic code.
+                        </li>
+                        <li>
+                            The access methods must assume only the root entity has been loaded. If it needs relationship that isn’t loaded, 
+                            then it must load the extra relational data itself. This simplifies the calling pattern to all access methods.
+                        </li>
+                    </ol>
+                </p>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,187 @@
+﻿@model ProjectDetailsViewModel
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <h2>Project Details</h2>
+        </div>
+        <div class="col-sm">
+            <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col">
+            <p>See the details for specific project.</p>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Project.Id)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Project.Id)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Project.Manager)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Project.Manager.FullName)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Project.Name)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Project.Name)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Project.Description)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Project.Description)
+                </dd>
+            </dl>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md">
+            <h2>Team</h2>
+        </div>
+        <div class="col-md-12">
+            <div class="input-group mb-3">
+                <select class="addTeamMemberSelect form-control" placeholder="Team member's full name" aria-label="Team member's full name" aria-describedby="button-addon2" asp-items="@Model.AvailableUsers"></select>
+                <div class="input-group-append">
+                    <a asp-action="AddTeamMember" asp-route-projectId="@Model.Project.Id" class="addTeamMemberAction btn btn-primary" type="button" id="button-addon2">Add member</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="table-responsive-md">
+                <table id="teamMembersTable" class="table table-bordred table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th class="align-middle">Id</th>
+                            <th class="align-middle">Full name</th>
+                            <th class="align-middle">Email</th>
+                            <th class="align-middle">Role</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Project.TeamMembers.Any())
+                        {
+                            <tr><td colspan="5">There are no team members for this project :(</td></tr>
+                        }
+                        else
+                        {
+                            @foreach (var item in Model.Project.TeamMembers)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.FullName</td>
+                                    <td>@item.Email</td>
+                                    <td>@item.Role</td>
+                                    <td>
+                                        <a asp-action="RemoveTeamMember" asp-route-projectId="@Model.Project.Id" asp-route-teamMemberId="@item.Id"><i class="fa fa-lg fa-fw fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md">
+            <h2>Bugs</h2>
+        </div>
+        <div class="col-md-12">
+            <div class="table-responsive-md">
+                <table id="bugsTable" class="table table-bordred table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th class="align-middle">Id</th>
+                            <th class="align-middle">Due date</th>
+                            <th class="align-middle">Title</th>
+                            <th class="align-middle">Status</th>
+                            <th class="align-middle">Priority</th>
+                            <th><a asp-action="AddProjectBug" asp-route-projectId="@Model.Project.Id" class="align-middle float-right btn btn-outline-info">Create Bug</a></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Project.Bugs.Any())
+                        {
+                            <tr><td colspan="6">There are no bugs in this project :)</td></tr>
+                        }
+                        else
+                        {
+                            @foreach (var item in Model.Project.Bugs)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.DueDate</td>
+                                    <td>@item.Title</td>
+                                    <td>@item.Status</td>
+                                    <td>@item.Priority</td>
+                                    <td class="float-right">
+                                        <a asp-action="DetailProjectBug" asp-route-projectId="@Model.Project.Id" asp-route-bugId="@item.Id"><i class="fa fa-lg fa-fw fa-file"></i></a>
+                                        <a asp-action="UpdateProjectBug" asp-route-projectId="@Model.Project.Id" asp-route-bugId="@item.Id"><i class="fa fa-lg fa-fw fa-pencil"></i></a>
+                                        <a href="#" class="deleteProjectBugAction" data-toggle="modal" data-target="#removeProjectBugModal" data-id="@item.Id"><i class="fa fa-lg fa-fw fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="removeProjectBugModal" tabindex="-1" role="dialog" aria-labelledby="removeProjectBugModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="removeProjectBugModalLabel">Remove this Bug?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure?
+                <input type="hidden" name="hiddenValue" id="hiddenValue" value="" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                <a asp-action="RemoveProjectBug" asp-route-projectId="@Model.Project.Id" id="confirmProjectBugDelete" class="btn btn-danger">Remove</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $('.addTeamMemberAction').click(function () {
+                var teamMemberId = $('.addTeamMemberSelect option:selected').val();
+                var href = $(this).attr("href");
+                $(this).attr("href", href + "&teamMemberId=" + teamMemberId);
+            })
+
+            $('.deleteProjectBugAction').click(function () {
+                var bugId = $(this).data('id');
+                var href = $("#confirmProjectBugDelete").attr("href");
+                $("#confirmProjectBugDelete").attr("href", href + "&bugId=" + bugId);
+            })
+        });        
+    </script>
+}

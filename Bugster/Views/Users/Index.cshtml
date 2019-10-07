@@ -1,0 +1,105 @@
+﻿@model IEnumerable<UserResponse>
+@{
+    ViewData["Title"] = "Users";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <h2>Available users</h2>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col">
+            <p>View all the users.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-responsive-md">
+                <table id="usersTable" class="table table-bordred table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th class="align-middle">Id</th>
+                            <th class="align-middle">Full name</th>
+                            <th class="align-middle">Email</th>
+                            <th class="align-middle">Role</th>
+                            <th class="align-middle">Status</th>
+                            <th><a asp-action="Create" class="align-middle float-right btn btn-outline-info">Add User</a></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!Model.Any())
+                        {
+                            <tr><td colspan="6">There are no users in the database :(</td></tr>
+                        }
+                        else
+                        {
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.FullName</td>
+                                    <td>@item.Email</td>
+                                    <td>@item.Role</td>
+                                    <td>@item.Status</td>
+                                    <td class="float-right">
+                                        <a asp-action="Update" asp-route-userId="@item.Id"><i class="fa fa-lg fa-fw fa-pencil"></i></a>
+                                        <a href="#" class="deleteUserAction" data-toggle="modal" data-target="#deleteUserModal" data-id="@item.Id"><i class="fa fa-lg fa-fw fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteUserModalLabel">Delete This User?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Are you sure?
+                <input type="hidden" name="hiddenValue" id="hiddenValue" value="" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                <a asp-action="Delete" id="confirmUserDelete" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            $('#usersTable').DataTable({
+                responsive: true,
+                "columns": [
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    { "orderable": false }
+                ]
+            });
+
+            $('.deleteUserAction').click(function () {
+                var userId = $(this).data('id');
+                var href = $("#confirmUserDelete").attr("href");
+                $("#confirmUserDelete").attr("href", href + "?userId=" + userId);
+            });
+        });
+        
+    </script>
+}

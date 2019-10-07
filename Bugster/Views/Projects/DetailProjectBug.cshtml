@@ -1,0 +1,70 @@
+﻿@model ProjectBugDetailViewModel
+@{
+    ViewData["Title"] = "Details project bug";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <h2>Project bug details</h2>
+        </div>
+        <div class="col-sm">
+            <a asp-action="Details" asp-route-projectId="@Model.ProjectId" class="btn btn-outline-secondary">Back to project</a>
+        </div>
+    </div>
+    <div class="row mt-3">
+        <div class="col">
+            <p>See all details for specific project bug.</p>
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-12">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.Bug.Id)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Bug.Id)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Bug.Title)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Bug.Title)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Bug.DueDate)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Bug.DueDate)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Bug.Assignee)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Bug.Assignee.FullName)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Bug.Description)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Bug.Description)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Bug.Priority)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Bug.Priority)
+                </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Bug.Status)
+                </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.Bug.Status)
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
